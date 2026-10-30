@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" fill="none">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ebe4d7"/>
+      <stop offset="1" stop-color="#d7d0c4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="240" cy="240" r="220" fill="url(#bg3)" opacity=".3"/>
+
+  <!-- Blackboard -->
+  <g transform="translate(100, 100)">
+    <rect width="280" height="190" rx="6" fill="#20201c"/>
+    <rect x="8" y="8" width="264" height="174" rx="3" fill="#2d2d28"/>
+    <!-- Chalk writing -->
+    <g stroke="#f5f1e9" stroke-width="1.5" stroke-linecap="round" opacity=".6">
+      <path d="M30 40h100"/>
+      <path d="M30 60h140"/>
+      <path d="M30 80h80"/>
+      <path d="M30 100h120"/>
+    </g>
+    <!-- Chalk marks / diagram -->
+    <circle cx="210" cy="80" r="30" fill="none" stroke="#a74d35" stroke-width="2" opacity=".6"/>
+    <circle cx="210" cy="80" r="15" fill="none" stroke="#68745d" stroke-width="1.5" opacity=".5"/>
+    <path d="M210 50V110 M180 80H240" stroke="#f5f1e9" stroke-width="1" opacity=".3"/>
+    <!-- Chalk tray -->
+    <rect x="-5" y="190" width="290" height="8" rx="2" fill="#716f68"/>
+    <!-- Chalk pieces -->
+    <rect x="30" y="188" width="25" height="5" rx="2" fill="#f5f1e9"/>
+    <rect x="65" y="188" width="18" height="5" rx="2" fill="#a74d35" opacity=".8"/>
+  </g>
+
+  <!-- Graduation cap -->
+  <g transform="translate(300, 70)">
+    <path d="M0 0L50-18L100 0L50 18Z" fill="#20201c"/>
+    <path d="M50 18V45" stroke="#20201c" stroke-width="2"/>
+    <path d="M25 8V35C25 45 75 45 75 35V8" fill="none" stroke="#20201c" stroke-width="1.5"/>
+    <circle cx="50" cy="45" r="3" fill="#a74d35"/>
+    <path d="M50 45V60" stroke="#a74d35" stroke-width="1.5"/>
+    <rect x="44" y="58" width="12" height="6" rx="1" fill="#a74d35"/>
+  </g>
+
+  <!-- Film strip (creative practice) -->
+  <g transform="translate(80, 340) rotate(-8)">
+    <rect width="320" height="45" rx="3" fill="#20201c"/>
+    <rect y="3" width="320" height="8" fill="none">
+      <animate attributeName="x" values="0;-26" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <!-- Sprocket holes top -->
+    <g fill="#f5f1e9" opacity=".4">
+      <rect x="10" y="4" width="10" height="5" rx="1"/>
+      <rect x="50" y="4" width="10" height="5" rx="1"/>
+      <rect x="90" y="4" width="10" height="5" rx="1"/>
+      <rect x="130" y="4" width="10" height="5" rx="1"/>
+      <rect x="170" y="4" width="10" height="5" rx="1"/>
+      <rect x="210" y="4" width="10" height="5" rx="1"/>
+      <rect x="250" y="4" width="10" height="5" rx="1"/>
+      <rect x="290" y="4" width="10" height="5" rx="1"/>
+    </g>
+    <!-- Sprocket holes bottom -->
+    <g fill="#f5f1e9" opacity=".4">
+      <rect x="10" y="36" width="10" height="5" rx="1"/>
+      <rect x="50" y="36" width="10" height="5" rx="1"/>
+      <rect x="90" y="36" width="10" height="5" rx="1"/>
+      <rect x="130" y="36" width="10" height="5" rx="1"/>
+      <rect x="170" y="36" width="10" height="5" rx="1"/>
+      <rect x="210" y="36" width="10" height="5" rx="1"/>
+      <rect x="250" y="36" width="10" height="5" rx="1"/>
+      <rect x="290" y="36" width="10" height="5" rx="1"/>
+    </g>
+    <!-- Film frames -->
+    <rect x="8" y="12" width="55" height="22" rx="2" fill="#a74d35"/>
+    <rect x="70" y="12" width="55" height="22" rx="2" fill="#68745d"/>
+    <rect x="132" y="12" width="55" height="22" rx="2" fill="#ebe4d7"/>
+    <rect x="194" y="12" width="55" height="22" rx="2" fill="#716f68"/>
+    <rect x="256" y="12" width="55" height="22" rx="2" fill="#a74d35" opacity=".7"/>
+  </g>
+
+  <!-- Decorative dots -->
+  <g fill="#a74d35">
+    <circle cx="80" cy="80" r="3"/><circle cx="400" cy="300" r="2.5"/>
+    <circle cx="70" cy="320" r="2"/><circle cx="420" cy="140" r="2"/>
+  </g>
+
+  <!-- Birds -->
+  <g fill="none" stroke="#20201c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".4">
+    <path transform="translate(60, 140) scale(.6)" d="M0 0q8-9 16 0q8-9 16 0"/>
+    <path transform="translate(400, 100) scale(.5)" d="M0 0q8-9 16 0q8-9 16 0"/>
+  </g>
+</svg>
+
