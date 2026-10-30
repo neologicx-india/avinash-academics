@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { navItems } from "@/lib/content";
@@ -10,9 +11,19 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <Link href="/" className="wordmark" onClick={() => setOpen(false)}>
-          <span>AJ</span>
-          <span className="wordmark-name">Avinash Jodha</span>
+        <Link
+          href="/"
+          className="flex items-center py-1 group shrink-0"
+          onClick={() => setOpen(false)}
+        >
+          <Image
+            src="/logo.png"
+            alt="Professor Avinash Jodha"
+            width={260}
+            height={98}
+            className="h-12 sm:h-16 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+            priority
+          />
         </Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
           {navItems.map(([label, href]) => (

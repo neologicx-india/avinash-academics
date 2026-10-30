@@ -41,7 +41,8 @@ a {
   z-index: 20;
 }
 .header-inner {
-  min-height: 78px;
+  min-height: 80px;
+  padding: 6px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -413,7 +414,7 @@ p {
   color: var(--muted);
   line-height: 2;
   position: sticky;
-  top: 100px;
+  top: 106px;
   align-self: start;
 }
 .detail-content h2 {
@@ -925,4 +926,3 @@ p {
   overflow: hidden !important;
   margin: auto !important;
 }
-
