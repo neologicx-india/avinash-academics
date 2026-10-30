@@ -61,12 +61,6 @@ export default function BooksPage() {
               <a className="button" href="#volumes">
                 Browse by Semester <ArrowUpRight size={16} />
               </a>
-              <Link className="button secondary" href="/brochure.pdf">
-                Download the Brochure <Download size={16} />
-              </Link>
-              <Link className="button secondary" href="/contact">
-                Ask About Institutional Orders <ArrowUpRight size={16} />
-              </Link>
             </div>
           </Reveal>
         </div>

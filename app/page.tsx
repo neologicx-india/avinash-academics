@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Download } from "lucide-react";
 import { Reveal } from "@/components/reveal";
+import { BooksSlider } from "@/components/books-slider";
 
 export default function Home() {
   return (
@@ -57,40 +58,38 @@ export default function Home() {
 
       {/* ── The Literary Compass ── */}
       <section className="section section-tint">
-        <div className="container">
-          <div className="zigzag">
-            <Reveal>
-              <div className="zigzag-text">
-                <div className="eyebrow">A complete companion</div>
-                <h2 className="section-title">The Literary Compass</h2>
-                <p className="body-copy">
-                  Literature becomes more accessible when its historical
-                  settings, language and central questions are explained with
-                  care. The Literary Compass brings together literary
-                  foundations, critical studies, detailed summaries, glossaries
-                  and answered practice across six semesters. Explore the volume
-                  for your semester and contact the publisher for availability
-                  and ordering.
-                </p>
-                <div className="hero-actions">
-                  <Link className="button" href="/books">
-                    View All Six Volumes <ArrowUpRight size={16} />
-                  </Link>
-                  {/* <Link className="button secondary" href="/brochure.pdf">
-                    Download the Brochure <Download size={16} />
-                  </Link> */}
+        <div className="container !max-w-7xl">
+          <Reveal>
+            <div className="mb-7">
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-5">
+                <div>
+                  <div className="eyebrow">A complete companion</div>
+                  <h2 className="section-title">The Literary Compass</h2>
                 </div>
+
+                <Link
+                  className="button whitespace-nowrap shrink-0 self-start sm:self-auto"
+                  href="/books"
+                >
+                  View All Six Volumes <ArrowUpRight size={16} />
+                </Link>
               </div>
-            </Reveal>
+
+              <p className="text-[#5e5b54] text-base sm:text-lg leading-relaxed text-justify">
+                Literature becomes more accessible when its historical settings,
+                language and central questions are explained with care. The
+                Literary Compass brings together literary foundations, critical
+                studies, detailed summaries, glossaries and answered practice
+                across six semesters. Explore the volume for your semester and
+                contact the publisher for availability and ordering.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* ── Single-Row Interactive Swiper Slider for all Semesters ── */}
+          <div>
             <Reveal delay={0.15}>
-              <div className="zigzag-visual">
-                <Image
-                  src="/illustration-compass.svg"
-                  alt="The Literary Compass illustration"
-                  width={480}
-                  height={480}
-                />
-              </div>
+              <BooksSlider />
             </Reveal>
           </div>
         </div>
