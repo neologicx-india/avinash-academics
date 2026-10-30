@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowUpRight,
@@ -14,11 +15,25 @@ import {
 } from "lucide-react";
 import { books, seriesInfo } from "@/lib/content";
 import { Reveal } from "@/components/reveal";
+import { BuyNowButton } from "@/components/qr-modal";
 
 export const metadata: Metadata = {
   title: "The Literary Compass — A Six-Volume Companion by Prof. Avinash Jodha",
   description:
     "A Complete Companion for BA English Literature across six semesters based on the syllabus of Maharaja Ganga Singh University, Bikaner under NEP.",
+};
+
+// Book cover dimensions extracted from image assets
+const bookCoverDimensions: Record<
+  number,
+  { width: number; height: number; aspect: string }
+> = {
+  1: { width: 1028, height: 1408, aspect: "1028/1408" },
+  2: { width: 1086, height: 1448, aspect: "1086/1448" },
+  3: { width: 1086, height: 1448, aspect: "1086/1448" },
+  4: { width: 1024, height: 1536, aspect: "1024/1536" },
+  5: { width: 1024, height: 1536, aspect: "1024/1536" },
+  6: { width: 1024, height: 1536, aspect: "1024/1536" },
 };
 
 export default function BooksPage() {
@@ -30,19 +45,19 @@ export default function BooksPage() {
           <Reveal>
             <div className="eyebrow">The Literary Compass</div>
             <h1 className="display">
-              A Complete Companion
+              A Complete Companion for
               <br />
-              for <em>BA English Literature.</em>
+              <em>BA English Literature.</em>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="max-w-3xl space-y-4 mt-7 text-lg md:text-xl text-[#5c5a52] leading-relaxed">
+            <div className="w-full space-y-4 mt-7 text-lg md:text-xl text-[#5c5a52] leading-relaxed">
               <p>{seriesInfo.description1}</p>
               <p className="text-base md:text-lg text-[#716f68]">
                 {seriesInfo.description2}
               </p>
             </div>
-            <div className="hero-actions mt-8">
+            <div className="hero-actions mt-8 flex flex-wrap gap-3">
               <a className="button" href="#volumes">
                 Browse by Semester <ArrowUpRight size={16} />
               </a>
@@ -115,7 +130,7 @@ export default function BooksPage() {
       </section>
 
       {/* ── Audience Guidance Cards (For students, teachers, booksellers) ── */}
-      <section className="section">
+      {/* <section className="section">
         <div className="container">
           <Reveal>
             <div className="mb-10">
@@ -163,9 +178,9 @@ export default function BooksPage() {
                   </h3>
                   <p className="text-sm leading-relaxed text-[#5e5b54]">
                     Contact the publisher about availability, review-copy
-                    enquiries and institutional purchases. Structured
-                    curriculum alignment provides ideal support for collegiate
-                    instruction and library reference.
+                    enquiries and institutional purchases. Structured curriculum
+                    alignment provides ideal support for collegiate instruction
+                    and library reference.
                   </p>
                 </div>
                 <div className="mt-6 pt-4 border-t border-[var(--line)]">
@@ -206,7 +221,7 @@ export default function BooksPage() {
             </Reveal>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── Volumes Grid ── */}
       <section id="volumes" className="section section-tint scroll-mt-20">
@@ -225,65 +240,88 @@ export default function BooksPage() {
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {books.map((book, i) => (
-              <Reveal key={book.slug} delay={i * 0.08}>
-                <div className="border border-[var(--line)] bg-[var(--paper)] p-7 flex flex-col justify-between h-full relative group transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  {/* Spine accent bar */}
-                  <div
-                    className="absolute top-0 left-0 bottom-0 w-1.5 transition-all group-hover:w-2"
-                    style={{ backgroundColor: book.color }}
-                  />
-
-                  <div>
-                    <div className="flex items-center justify-between mb-3 text-xs font-mono tracking-wider text-[var(--muted)]">
-                      <span className="text-[var(--rust)] font-semibold">
-                        VOL. 0{book.semesterNumber}
-                      </span>
-                      <span>{book.semester}</span>
-                    </div>
-
-                    <h3 className="font-serif text-2xl font-medium tracking-tight leading-snug mb-2 group-hover:text-[var(--rust)] transition-colors">
-                      <Link href={`/books/${book.slug}`}>{book.title}</Link>
-                    </h3>
-
-                    <p className="text-xs uppercase tracking-wider font-mono text-[var(--muted)] mb-4">
-                      {book.subtitle}
-                    </p>
-
-                    <p className="text-sm text-[#5e5b54] line-clamp-3 leading-relaxed mb-5">
-                      {book.description}
-                    </p>
-
-                    <div className="bg-[var(--paper-deep)] p-3 rounded-sm border border-[var(--line)] mb-5">
-                      <div className="text-[11px] font-mono uppercase tracking-wider text-[var(--muted)] mb-1">
-                        Selected Coverage:
+            {books.map((book, i) => {
+              const dim = bookCoverDimensions[book.semesterNumber] || {
+                width: 1028,
+                height: 1408,
+                aspect: "1028/1408",
+              };
+              return (
+                <Reveal key={book.slug} delay={i * 0.08}>
+                  <div className="border border-[var(--line)] bg-[var(--paper)] p-5 flex flex-col justify-between h-full relative group transition-all duration-300  hover:shadow-xl">
+                    <div>
+                      {/* Top Meta */}
+                      <div className="flex items-center justify-between mb-3 text-xs font-mono tracking-wider text-[var(--muted)]">
+                        <span className="text-[var(--rust)] font-semibold">
+                          VOL. 0{book.semesterNumber}
+                        </span>
+                        <span>{book.semester}</span>
                       </div>
-                      <div className="text-xs text-[var(--ink)] font-medium leading-relaxed">
-                        {book.coverage}
-                      </div>
-                    </div>
-                  </div>
 
-                  <div>
-                    <div className="pt-4 border-t border-[var(--line)] flex items-center justify-between gap-3">
+                      {/* 3D Book Showcase Stage with exact dimensions */}
                       <Link
                         href={`/books/${book.slug}`}
-                        className="button text-xs py-2 px-3 flex-1 justify-center"
+                        className="group/cover block relative w-full aspect-[1028/1408] mb-4 p-3.5 rounded-sm bg-gradient-to-b from-[#faf8f3] via-[#f3eee3] to-[#e8e1d2] border border-[#dcd4c3] overflow-hidden flex items-center justify-center cursor-pointer transition-all duration-300 hover:border-[var(--rust)]/60 hover:shadow-md"
+                        title={`View ${book.title}`}
                       >
-                        Explore Volume <ArrowUpRight size={14} />
+                        {/* Archival micro texture */}
+                        <div className="absolute inset-0 bg-[radial-gradient(#1a1814_0.75px,transparent_0.75px)] [background-size:12px_12px] opacity-[0.03] pointer-events-none" />
+
+                        {/* Centered Realistic 3D Book */}
+                        <div className="relative w-full h-full flex items-center justify-center">
+                          <div className="relative h-full w-auto aspect-[1028/1408] max-w-full transition-transform duration-300 ease-out group-hover/cover:-translate-y-1.5 group-hover/cover:scale-[1.02]">
+                            {/* Book drop shadow */}
+                            <div className="absolute inset-0 bg-black/25 blur-md translate-y-2.5 scale-[0.96] rounded-[2px] transition-all duration-300 group-hover/cover:blur-lg group-hover/cover:translate-y-4 group-hover/cover:scale-[0.98] group-hover/cover:bg-black/30" />
+
+                            {/* Book Cover Image */}
+                            <Image
+                              src={`/sem-${book.semesterNumber}.jpeg`}
+                              alt={`${book.title} - ${book.semester}`}
+                              width={dim.width}
+                              height={dim.height}
+                              className="relative z-10 h-full w-auto object-contain rounded-[2px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] ring-1 ring-black/10"
+                              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                              quality={92}
+                              priority={book.semesterNumber <= 3}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Hover hint tag */}
+                        <span className="absolute bottom-2.5 right-2.5 text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded bg-[var(--ink)] text-[var(--paper)] opacity-0 group-hover/cover:opacity-100 transition-opacity shadow-sm">
+                          Explore →
+                        </span>
                       </Link>
-                      <Link
-                        href="/contact"
-                        className="button secondary text-xs py-2 px-3"
-                        title="Enquire About This Volume"
-                      >
-                        Enquire
-                      </Link>
+
+                      {/* Title & Subtitle */}
+                      <h3 className="font-serif text-lg sm:text-xl font-medium tracking-tight leading-snug mb-1 group-hover:text-[var(--rust)] transition-colors line-clamp-2">
+                        <Link href={`/books/${book.slug}`}>{book.title}</Link>
+                      </h3>
+
+                      <p className="text-xs uppercase tracking-wider font-mono text-[var(--muted)] mb-3">
+                        {book.subtitle}
+                      </p>
+                    </div>
+
+                    {/* Actions */}
+                    <div>
+                      <div className="pt-4 border-t border-[var(--line)] flex items-center justify-between gap-3">
+                        <Link
+                          href={`/books/${book.slug}`}
+                          className="button text-xs py-2 px-3 flex-1 justify-center"
+                        >
+                          Explore Volume <ArrowUpRight size={14} />
+                        </Link>
+                        <BuyNowButton
+                          volumeTitle={book.title}
+                          semester={book.semester}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -410,7 +448,8 @@ export default function BooksPage() {
 
               <div className="pt-6 border-t border-[var(--line)] flex flex-wrap gap-4 items-center justify-between">
                 <p className="text-xs text-[var(--muted)]">
-                  Please specify: Semester volume, quantity needed, and delivery PIN code.
+                  Please specify: Semester volume, quantity needed, and delivery
+                  PIN code.
                 </p>
                 <Link className="button" href="/contact">
                   Enquire with Publisher <ArrowUpRight size={16} />

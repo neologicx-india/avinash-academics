@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" fill="none">
+  <defs>
+    <linearGradient id="creative-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ebe4d7"/>
+      <stop offset="1" stop-color="#d7d0c4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background halo -->
+  <circle cx="240" cy="240" r="220" fill="url(#creative-bg)" opacity=".3"/>
+  <circle cx="240" cy="240" r="175" fill="none" stroke="#d7d0c4" stroke-width="1.5" stroke-dasharray="4 8"/>
+
+  <!-- Film Reel (left top) -->
+  <g transform="translate(140, 150)">
+    <circle cx="0" cy="0" r="62" fill="#20201c"/>
+    <circle cx="0" cy="0" r="54" fill="none" stroke="#f5f1e9" stroke-width="2"/>
+    <circle cx="0" cy="0" r="22" fill="#f5f1e9"/>
+    <circle cx="0" cy="0" r="10" fill="#20201c"/>
+    <!-- Reel holes -->
+    <circle cx="0" cy="-36" r="8" fill="#f5f1e9"/>
+    <circle cx="36" cy="0" r="8" fill="#f5f1e9"/>
+    <circle cx="0" cy="36" r="8" fill="#f5f1e9"/>
+    <circle cx="-36" cy="0" r="8" fill="#f5f1e9"/>
+    <circle cx="25" cy="-25" r="7" fill="#a74d35" opacity=".8"/>
+    <circle cx="-25" cy="25" r="7" fill="#68745d" opacity=".8"/>
+  </g>
+
+  <!-- Film Clapperboard (right top) -->
+  <g transform="translate(250, 95) rotate(8)">
+    <rect x="0" y="32" width="160" height="110" rx="4" fill="#20201c"/>
+    <!-- Top flap (open angle) -->
+    <g transform="rotate(-15 0 32)">
+      <rect x="0" y="0" width="160" height="30" rx="3" fill="#20201c"/>
+      <!-- Chevron stripes -->
+      <path d="M15 0L30 30H45L30 0Z" fill="#f5f1e9"/>
+      <path d="M55 0L70 30H85L70 0Z" fill="#f5f1e9"/>
+      <path d="M95 0L110 30H125L110 0Z" fill="#f5f1e9"/>
+      <path d="M135 0L150 30H160V10L145 0Z" fill="#f5f1e9"/>
+    </g>
+    <!-- Text / Scene lines on clapper -->
+    <rect x="15" y="48" width="130" height="2" fill="#716f68"/>
+    <rect x="15" y="65" width="60" height="2" fill="#716f68"/>
+    <rect x="85" y="65" width="60" height="2" fill="#716f68"/>
+    <text x="20" y="105" font-family="DM Mono, monospace" font-size="12" fill="#a74d35" font-weight="600">SCENE 01 · TAKE 01</text>
+    <text x="20" y="125" font-family="DM Mono, monospace" font-size="9" fill="#f5f1e9" opacity=".7">YOU SEE · 2008</text>
+  </g>
+
+  <!-- Script & Translation Manuscripts (bottom stack) -->
+  <g transform="translate(90, 270)">
+    <!-- Bottom script page -->
+    <g transform="rotate(-6)">
+      <rect x="0" y="0" width="170" height="135" rx="3" fill="#ebe4d7" stroke="#20201c" stroke-width="1.5"/>
+      <line x1="20" y1="25" x2="150" y2="25" stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <line x1="20" y1="45" x2="130" y2="45" stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <line x1="20" y1="65" x2="140" y2="65" stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+      <line x1="20" y1="85" x2="110" y2="85" stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    </g>
+
+    <!-- Top translation manuscript (Pabuji Rathore / Poetry) -->
+    <g transform="translate(120, -10) rotate(5)">
+      <rect x="0" y="0" width="180" height="145" rx="3" fill="#f5f1e9" stroke="#20201c" stroke-width="2"/>
+      <path d="M0 0L40 0L0 40Z" fill="#d7d0c4" opacity=".5"/>
+      <text x="25" y="32" font-family="Playfair Display, serif" font-size="14" fill="#a74d35" font-weight="600">Translation</text>
+      <line x1="25" y1="48" x2="155" y2="48" stroke="#20201c" stroke-width="1.5" opacity=".7"/>
+      <line x1="25" y1="65" x2="145" y2="65" stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+      <line x1="25" y1="82" x2="155" y2="82" stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+      <line x1="25" y1="99" x2="135" y2="99" stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+      <line x1="25" y1="116" x2="100" y2="116" stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+      <!-- Stamp / Seal -->
+      <circle cx="145" cy="115" r="14" fill="none" stroke="#a74d35" stroke-width="1.5" stroke-dasharray="2 2"/>
+      <text x="145" y="118" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#a74d35">RAJ</text>
+    </g>
+  </g>
+
+  <!-- Pen across manuscripts -->
+  <g transform="translate(320, 240) rotate(-40)">
+    <rect x="-3" y="0" width="6" height="110" rx="2" fill="#20201c"/>
+    <path d="M-3 110L0 125L3 110" fill="#a74d35"/>
+    <rect x="-4" y="12" width="8" height="6" rx="1" fill="#a74d35" opacity=".6"/>
+  </g>
+
+  <!-- Film tape / strip linking elements -->
+  <g transform="translate(70, 390) rotate(-4)">
+    <rect width="340" height="32" rx="2" fill="#20201c"/>
+    <!-- Sprockets -->
+    <g fill="#f5f1e9" opacity=".4">
+      <rect x="10" y="3" width="8" height="4" rx="1"/>
+      <rect x="40" y="3" width="8" height="4" rx="1"/>
+      <rect x="70" y="3" width="8" height="4" rx="1"/>
+      <rect x="100" y="3" width="8" height="4" rx="1"/>
+      <rect x="130" y="3" width="8" height="4" rx="1"/>
+      <rect x="160" y="3" width="8" height="4" rx="1"/>
+      <rect x="190" y="3" width="8" height="4" rx="1"/>
+      <rect x="220" y="3" width="8" height="4" rx="1"/>
+      <rect x="250" y="3" width="8" height="4" rx="1"/>
+      <rect x="280" y="3" width="8" height="4" rx="1"/>
+      <rect x="310" y="3" width="8" height="4" rx="1"/>
+
+      <rect x="10" y="25" width="8" height="4" rx="1"/>
+      <rect x="40" y="25" width="8" height="4" rx="1"/>
+      <rect x="70" y="25" width="8" height="4" rx="1"/>
+      <rect x="100" y="25" width="8" height="4" rx="1"/>
+      <rect x="130" y="25" width="8" height="4" rx="1"/>
+      <rect x="160" y="25" width="8" height="4" rx="1"/>
+      <rect x="190" y="25" width="8" height="4" rx="1"/>
+      <rect x="220" y="25" width="8" height="4" rx="1"/>
+      <rect x="250" y="25" width="8" height="4" rx="1"/>
+      <rect x="280" y="25" width="8" height="4" rx="1"/>
+      <rect x="310" y="25" width="8" height="4" rx="1"/>
+    </g>
+    <rect x="25" y="9" width="45" height="14" fill="#a74d35" opacity=".9"/>
+    <rect x="85" y="9" width="45" height="14" fill="#68745d" opacity=".9"/>
+    <rect x="145" y="9" width="45" height="14" fill="#ebe4d7" opacity=".9"/>
+    <rect x="205" y="9" width="45" height="14" fill="#716f68" opacity=".9"/>
+    <rect x="265" y="9" width="45" height="14" fill="#a74d35" opacity=".7"/>
+  </g>
+
+  <!-- Decorative sparkles / dots -->
+  <g fill="#a74d35">
+    <circle cx="80" cy="110" r="3"/>
+    <circle cx="420" cy="190" r="2.5"/>
+    <circle cx="410" cy="350" r="2"/>
+    <circle cx="60" cy="270" r="2.5"/>
+  </g>
+</svg>
+

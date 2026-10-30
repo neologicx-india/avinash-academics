@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Download, GraduationCap, BookOpen, Film, Mic } from "lucide-react";
+import {
+  ArrowUpRight,
+  Download,
+  GraduationCap,
+  BookOpen,
+  Film,
+  Mic,
+} from "lucide-react";
 import { Reveal } from "@/components/reveal";
 
 export const metadata: Metadata = { title: "About — Professor Avinash Jodha" };
@@ -49,20 +57,63 @@ export default function About() {
       {/* ── Hero ── */}
       <section className="about-hero">
         <div className="container">
-          <Reveal>
-            <div className="eyebrow">About</div>
-            <h1 className="display about-hero-title">
-              Professor<br />
-              <em>Avinash Jodha.</em>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="about-hero-lede">
-              Professor and Head of the Department of English at Government
-              College Gangashahar, Bikaner — bringing literary scholarship into
-              conversation with cinema, translation and creative practice.
-            </p>
-          </Reveal>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Left Content */}
+            <div className="lg:col-span-7">
+              <Reveal>
+                <div className="eyebrow">About</div>
+                <h1 className="display about-hero-title">
+                  Professor
+                  <br />
+                  <em>Avinash Jodha.</em>
+                </h1>
+              </Reveal>
+              <Reveal delay={0.12}>
+                <p className="about-hero-lede">
+                  Professor and Head of the Department of English at Government
+                  College Gangashahar, Bikaner — bringing literary scholarship
+                  into conversation with cinema, translation and creative
+                  practice.
+                </p>
+                <div className="hero-actions mt-8">
+                  <Link className="button" href="/books">
+                    View Books <ArrowUpRight size={16} />
+                  </Link>
+                  <Link className="button secondary" href="/contact">
+                    Academic Enquiries <ArrowUpRight size={16} />
+                  </Link>
+                </div>
+              </Reveal>
+            </div>
+
+            {/* Right: Optimised Portrait Image */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-end">
+              <Reveal delay={0.16}>
+                <div className="relative group max-w-[320px] md:max-w-[360px] w-full">
+                  {/* Decorative academic frame accent */}
+                  <div className="absolute -inset-2.5 border border-[var(--line)] pointer-events-none" />
+                  <div className="relative aspect-[4/5] bg-[var(--paper-deep)] border border-[var(--line)] overflow-hidden shadow-sm">
+                    <Image
+                      src="/avinash.png"
+                      alt="Professor Avinash Jodha"
+                      width={600}
+                      height={750}
+                      priority
+                      quality={85}
+                      sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 360px"
+                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="mt-3.5 flex items-center justify-between text-xs font-mono text-[var(--muted)]">
+                    <span className="text-[var(--rust)] font-semibold uppercase tracking-wider">
+                      Prof. Avinash Jodha
+                    </span>
+                    <span>Bikaner, Rajasthan</span>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -86,22 +137,25 @@ export default function About() {
           <div className="about-profile-grid">
             <Reveal>
               <div className="about-profile-text">
-                <div className="eyebrow" style={{ marginBottom: "18px" }}>Profile</div>
+                <div className="eyebrow" style={{ marginBottom: "18px" }}>
+                  Profile
+                </div>
                 <p>
                   I am Professor and Head of the Department of English at
                   Government College Gangashahar, Bikaner. My work brings
-                  literary scholarship into conversation with cinema, translation
-                  and creative practice. I am particularly interested in the
-                  ways texts and films represent belonging: how people remember
-                  places, negotiate identities and respond to displacement and
-                  change.
+                  literary scholarship into conversation with cinema,
+                  translation and creative practice. I am particularly
+                  interested in the ways texts and films represent belonging:
+                  how people remember places, negotiate identities and respond
+                  to displacement and change.
                 </p>
                 <p>
                   Across these fields, I examine the relationships between
                   narrative, history, culture and the individual. My academic
-                  experience includes doctoral supervision, postgraduate research
-                  guidance, a UGC-funded Minor Research Project completed in
-                  2006, and presentations at national and international events.
+                  experience includes doctoral supervision, postgraduate
+                  research guidance, a UGC-funded Minor Research Project
+                  completed in 2006, and presentations at national and
+                  international events.
                 </p>
                 <p>
                   I produced <em>You See</em> in 2008 and directed a documentary
@@ -111,11 +165,11 @@ export default function About() {
                   Bhardwaj&apos;s Shakespeare trilogy.
                 </p>
                 <div className="hero-actions" style={{ marginTop: "32px" }}>
-                  <Link className="button" href="/resources">
-                    Download Academic CV <Download size={16} />
+                  <Link className="button" href="/research">
+                    Explore Research <ArrowUpRight size={16} />
                   </Link>
-                  <Link className="button secondary" href="/contact">
-                    Academic Enquiries <ArrowUpRight size={16} />
+                  <Link className="button secondary" href="/creative-work">
+                    Creative Work <ArrowUpRight size={16} />
                   </Link>
                 </div>
               </div>
@@ -124,16 +178,22 @@ export default function About() {
             <Reveal delay={0.14}>
               <div className="about-profile-side">
                 <div className="about-spec-block">
-                  <div className="eyebrow" style={{ marginBottom: "16px" }}>Areas of Specialisation</div>
+                  <div className="eyebrow" style={{ marginBottom: "16px" }}>
+                    Areas of Specialisation
+                  </div>
                   <ul className="about-spec-list">
                     {specialisations.map((s) => (
-                      <li key={s} className="about-spec-item">{s}</li>
+                      <li key={s} className="about-spec-item">
+                        {s}
+                      </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="about-edu-block">
-                  <div className="eyebrow" style={{ marginBottom: "16px" }}>Education</div>
+                  <div className="eyebrow" style={{ marginBottom: "16px" }}>
+                    Education
+                  </div>
                   <div className="about-edu-item">
                     <span className="about-edu-year">2005</span>
                     <div>
@@ -159,7 +219,9 @@ export default function About() {
       <section className="section section-tint">
         <div className="container">
           <Reveal>
-            <div className="eyebrow" style={{ marginBottom: "8px" }}>Work &amp; Research</div>
+            <div className="eyebrow" style={{ marginBottom: "8px" }}>
+              Work &amp; Research
+            </div>
             <h2 className="section-title" style={{ marginBottom: "48px" }}>
               Areas of work
             </h2>
@@ -182,7 +244,9 @@ export default function About() {
       <section className="section">
         <div className="container">
           <Reveal>
-            <div className="eyebrow" style={{ marginBottom: "8px" }}>For Event Organisers</div>
+            <div className="eyebrow" style={{ marginBottom: "8px" }}>
+              For Event Organisers
+            </div>
             <h2 className="section-title" style={{ marginBottom: "36px" }}>
               Short biography
             </h2>

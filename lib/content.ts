@@ -238,7 +238,7 @@ export const navItems = [
   ["Research", "/research"],
   ["Creative Work", "/creative-work"],
   ["Teaching", "/teaching"],
-  ["Events", "/events"],
-  ["Resources", "/resources"],
+  ["Events & Resources", "/events"],
+
   ["Contact", "/contact"],
 ] as const;

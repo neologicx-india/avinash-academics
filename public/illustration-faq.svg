@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" fill="none">
+  <defs>
+    <linearGradient id="faq-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ebe4d7"/>
+      <stop offset="1" stop-color="#d7d0c4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background circular glow -->
+  <circle cx="240" cy="240" r="220" fill="url(#faq-bg)" opacity=".3"/>
+  <circle cx="240" cy="240" r="175" fill="none" stroke="#d7d0c4" stroke-width="1.5" stroke-dasharray="4 8"/>
+
+  <!-- Large Stylized Question Mark & Thought Balloon -->
+  <g transform="translate(150, 80)">
+    <!-- Speech / enquiry balloon -->
+    <path d="M0 40C0 17.9 22.4 0 50 0H140C167.6 0 190 17.9 190 40V100C190 122.1 167.6 140 140 140H65L20 170V136C8.2 127 0 114.5 0 100V40Z" fill="#f5f1e9" stroke="#20201c" stroke-width="2"/>
+    <!-- Serif Question Mark inside bubble -->
+    <text x="95" y="105" text-anchor="middle" font-family="Playfair Display, serif" font-size="96" font-style="italic" fill="#a74d35" font-weight="600">?</text>
+  </g>
+
+  <!-- Smaller Dialog Bubbles -->
+  <g transform="translate(80, 160)">
+    <circle cx="0" cy="0" r="18" fill="#ebe4d7" stroke="#20201c" stroke-width="1.5"/>
+    <circle cx="-16" cy="18" r="8" fill="#ebe4d7" stroke="#20201c" stroke-width="1.5"/>
+    <circle cx="-25" cy="30" r="4" fill="#a74d35"/>
+  </g>
+
+  <!-- Open Guidebook (The Literary Compass / Syllabus) -->
+  <g transform="translate(240, 310)">
+    <!-- Base pages -->
+    <path d="M0 20C-40-6-90-10-150 4V-95C-90-110-40-106 0-80Z" fill="#ebe4d7" stroke="#20201c" stroke-width="2"/>
+    <path d="M0 20C40-6 90-10 150 4V-95C90-110 40-106 0-80Z" fill="#f5f1e9" stroke="#20201c" stroke-width="2"/>
+    <path d="M0-80V20" stroke="#20201c" stroke-width="2"/>
+
+    <!-- Bookmark ribbon -->
+    <path d="M0-80V45L-12 32L-24 45V-80" fill="#a74d35"/>
+
+    <!-- Text line guides on right page -->
+    <g stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".5">
+      <path d="M25-70C55-80 90-82 125-75"/>
+      <path d="M25-52C55-62 90-64 125-57"/>
+      <path d="M25-34C55-44 90-46 125-39"/>
+      <path d="M25-16C55-26 90-28 125-21"/>
+    </g>
+
+    <!-- Text line guides on left page -->
+    <g stroke="#716f68" stroke-width="1.5" stroke-linecap="round" opacity=".5">
+      <path d="M-125-75C-90-82-55-80-25-70"/>
+      <path d="M-125-57C-90-64-55-62-25-52"/>
+      <path d="M-125-39C-90-46-55-44-25-34"/>
+      <path d="M-125-21C-90-28-55-26-25-16"/>
+    </g>
+
+    <!-- Compass star symbol on cover corner -->
+    <g transform="translate(100, -20) scale(0.6)">
+      <circle cx="0" cy="0" r="22" fill="#f5f1e9" stroke="#20201c" stroke-width="1.5"/>
+      <path d="M0-18L4-4L18 0L4 4L0 18L-4 4L-18 0L-4-4Z" fill="#a74d35"/>
+    </g>
+  </g>
+
+  <!-- Elegant Quill Pen resting beside book -->
+  <g transform="translate(350, 230) rotate(28)">
+    <rect x="-3" y="0" width="6" height="110" rx="2" fill="#20201c"/>
+    <path d="M-3 110L0 126L3 110" fill="#a74d35"/>
+    <rect x="-4" y="10" width="8" height="6" rx="1" fill="#a74d35" opacity=".6"/>
+  </g>
+
+  <!-- Delicate ink drops -->
+  <circle cx="395" cy="360" r="3.5" fill="#20201c" opacity=".35"/>
+  <circle cx="410" cy="370" r="2" fill="#20201c" opacity=".2"/>
+
+  <!-- Floating Help & Info Badges -->
+  <g transform="translate(330, 110) rotate(8)">
+    <rect width="64" height="26" rx="13" fill="#68745d" stroke="#20201c" stroke-width="1.5"/>
+    <text x="32" y="17" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="#f5f1e9" font-weight="600">FAQ</text>
+  </g>
+
+  <!-- Decorative sparkles and constellation dots -->
+  <g fill="#a74d35">
+    <circle cx="95" cy="95" r="3"/>
+    <circle cx="400" cy="180" r="2.5"/>
+    <circle cx="80" cy="380" r="2.5"/>
+    <circle cx="390" cy="70" r="2"/>
+    <circle cx="65" cy="270" r="2"/>
+  </g>
+
+  <g fill="none" stroke="#a74d35" stroke-width="1.5" stroke-linecap="round">
+    <!-- Star sparkle -->
+    <path d="M100 240v10M95 245h10"/>
+    <path d="M370 280v8M366 284h8"/>
+  </g>
+</svg>

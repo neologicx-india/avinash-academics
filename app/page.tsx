@@ -24,13 +24,13 @@ export default function Home() {
                 theory, Indian Writing in English, and the relationship between
                 cinema and literary adaptation.
               </p>
-              <p>
+              {/* <p>
                 Alongside academic writing, I work with documentary film,
                 translation and scriptwriting. I am also Chief Editor of The
                 Literary Compass, a six-volume companion series for BA English
                 Literature based on the syllabus of Maharaja Ganga Singh
                 University, Bikaner.
-              </p>
+              </p> */}
               <div className="hero-actions">
                 <Link className="button" href="/about">
                   About My Work <ArrowUpRight size={16} />
@@ -76,9 +76,9 @@ export default function Home() {
                   <Link className="button" href="/books">
                     View All Six Volumes <ArrowUpRight size={16} />
                   </Link>
-                  <Link className="button secondary" href="/brochure.pdf">
+                  {/* <Link className="button secondary" href="/brochure.pdf">
                     Download the Brochure <Download size={16} />
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </Reveal>
@@ -179,9 +179,7 @@ export default function Home() {
             <Reveal>
               <div className="zigzag-text">
                 <div className="eyebrow">Get in touch</div>
-                <h2 className="section-title">
-                  Academic and book enquiries
-                </h2>
+                <h2 className="section-title">Academic and book enquiries</h2>
                 <p className="body-copy">
                   For lectures, seminars, research conversations or publication
                   enquiries, please get in touch. Book purchases and

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
@@ -12,9 +13,23 @@ import {
   Building,
   Users,
   Info,
+  Phone,
 } from "lucide-react";
 import { books } from "@/lib/content";
 import { Reveal } from "@/components/reveal";
+import { BuyNowButton } from "@/components/qr-modal";
+
+const bookCoverDimensions: Record<
+  number,
+  { width: number; height: number; aspect: string }
+> = {
+  1: { width: 1028, height: 1408, aspect: "1028/1408" },
+  2: { width: 1086, height: 1448, aspect: "1086/1448" },
+  3: { width: 1086, height: 1448, aspect: "1086/1448" },
+  4: { width: 1024, height: 1536, aspect: "1024/1536" },
+  5: { width: 1024, height: 1536, aspect: "1024/1536" },
+  6: { width: 1024, height: 1536, aspect: "1024/1536" },
+};
 
 export function generateStaticParams() {
   return books.map((book) => ({ slug: book.slug }));
@@ -52,53 +67,124 @@ export default async function BookDetailPage({
 
   return (
     <main>
-      {/* ── Breadcrumb & Page Hero ── */}
-      <section className="page-hero">
+      {/* ── Redesigned Academic Book Detail Header ── */}
+      <section className="border-b border-[var(--line)] bg-gradient-to-b from-[var(--paper-deep)]/60 via-[var(--paper)] to-[var(--paper)] pt-8 pb-10">
         <div className="container">
+          {/* Breadcrumbs & Volume Pill */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-[var(--line)]/60">
+            <Link
+              href="/books"
+              className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--muted)] hover:text-[var(--rust)] transition-colors group"
+            >
+              <ArrowLeft
+                size={13}
+                className="transition-transform group-hover:-translate-x-1"
+              />
+              <span>The Literary Compass</span>
+              <span className="text-[var(--line)]">/</span>
+              <span>All Volumes</span>
+            </Link>
+
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider bg-[var(--paper-deep)] border border-[var(--line)] text-[var(--rust)] font-semibold uppercase">
+                Volume 0{book.semesterNumber} · {book.semester}
+              </span>
+              <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-mono tracking-wider bg-white/80 border border-[var(--line)] text-[var(--muted)] uppercase">
+                MGSU NEP Syllabus
+              </span>
+            </div>
+          </div>
+
           <Reveal>
-            <div className="mb-4">
-              <Link
-                href="/books"
-                className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[var(--muted)] hover:text-[var(--rust)] transition-colors"
-              >
-                <ArrowLeft size={13} /> Back to all volumes
-              </Link>
-            </div>
-            <div className="eyebrow">
-              The Literary Compass · {book.semester}
-            </div>
-            <h1 className="display max-w-4xl text-balance">
+            {/* Stately, proportionate serif title */}
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[var(--ink)] leading-[1.14] max-w-4xl text-balance">
               {book.title}
             </h1>
-            <p className="hero-lede font-serif italic text-[var(--rust)] !mt-4 text-xl md:text-2xl">
+
+            {/* Subtitle / Theme */}
+            <p className="font-serif italic text-lg sm:text-xl text-[var(--rust)] mt-3 max-w-3xl leading-relaxed">
               {book.subtitle}
             </p>
-          </Reveal>
 
-          <Reveal delay={0.1}>
-            <div className="hero-actions mt-8">
-              <Link
-                className="button"
-                href={`/contact?subject=${encodeURIComponent(
-                  `Enquiry for The Literary Compass ${book.semester}`
-                )}`}
-              >
-                Enquire About This Volume <ArrowUpRight size={16} />
-              </Link>
-              <Link className="button secondary" href="/brochure.pdf">
-                Download the Series Brochure <Download size={16} />
-              </Link>
+            {/* Academic Meta Ribbon */}
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-6 mt-6 pt-5 border-t border-[var(--line)] text-xs font-mono text-[var(--muted)]">
+              <div>
+                <span className="text-[var(--rust)] uppercase tracking-wider font-semibold">
+                  Chief Editor:
+                </span>{" "}
+                <span className="text-[var(--ink)] font-medium">
+                  {book.chiefEditor}
+                </span>
+              </div>
+              <span className="hidden md:inline text-[var(--line)]">|</span>
+              <div>
+                <span className="text-[var(--rust)] uppercase tracking-wider font-semibold">
+                  Course:
+                </span>{" "}
+                <span className="text-[var(--ink)] font-medium">
+                  {book.course}
+                </span>
+              </div>
+              <span className="hidden md:inline text-[var(--line)]">|</span>
+              <div>
+                <span className="text-[var(--rust)] uppercase tracking-wider font-semibold">
+                  Publisher:
+                </span>{" "}
+                <span className="text-[var(--ink)] font-medium">
+                  Surya Prakashan Mandir
+                </span>
+              </div>
             </div>
           </Reveal>
         </div>
       </section>
 
       {/* ── Volume Content Layout ── */}
-      <section className="section">
+      <section className="section !pt-12">
         <div className="container detail-layout">
           {/* Sidebar */}
           <aside className="detail-aside">
             <div className="space-y-6">
+              {/* 3D Realistic Book Cover Showcase */}
+              <div className="relative aspect-[1028/1408] w-full max-w-[260px] mx-auto p-3.5 rounded-sm bg-gradient-to-b from-[#faf8f3] via-[#f3eee3] to-[#e8e1d2] border border-[#dcd4c3] shadow-md flex items-center justify-center">
+                <div className="relative h-full w-auto aspect-[1028/1408] max-w-full drop-shadow-[0_12px_24px_rgba(20,15,10,0.2)]">
+                  {/* Book Cover Image with exact dimensions */}
+                  <Image
+                    src={`/sem-${book.semesterNumber}.jpeg`}
+                    alt={`${book.title} - ${book.semester}`}
+                    width={
+                      (
+                        bookCoverDimensions[book.semesterNumber] || {
+                          width: 1028,
+                        }
+                      ).width
+                    }
+                    height={
+                      (
+                        bookCoverDimensions[book.semesterNumber] || {
+                          height: 1408,
+                        }
+                      ).height
+                    }
+                    className="h-full w-auto object-contain rounded-[2px] ring-1 ring-black/10"
+                    priority
+                    quality={95}
+                  />
+                  {/* Spine Crease Highlight */}
+                  <div className="absolute inset-y-0 left-0 w-[4px] bg-gradient-to-r from-black/25 via-white/10 to-transparent pointer-events-none rounded-l-[2px]" />
+                </div>
+              </div>
+
+              {/* Quick Buy in Sidebar */}
+              <div className="pt-1">
+                <BuyNowButton
+                  volumeTitle={book.title}
+                  semester={book.semester}
+                  label="Order Volume (QR)"
+                  className="button w-full justify-center text-xs py-2.5"
+                />
+              </div>
+
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--muted)] block mb-1">
                   Volume Identifier
@@ -291,32 +377,60 @@ export default async function BookDetailPage({
 
             {/* 5. Ordering & Enquiries CTA */}
             <Reveal delay={0.18}>
-              <div className="p-8 border-2 border-[var(--ink)] bg-[var(--paper-deep)] flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                  <div className="font-mono text-xs uppercase tracking-widest text-[var(--rust)] mb-1">
-                    Procurement &amp; Orders
+              <div className="border border-[var(--line)] bg-[var(--paper-deep)] p-6 sm:p-8 relative overflow-hidden shadow-sm">
+                {/* Left accent spine */}
+                <div
+                  className="absolute top-0 left-0 bottom-0 w-1.5"
+                  style={{ backgroundColor: book.color }}
+                />
+
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-2">
+                  <div className="max-w-xl">
+                    <div className="font-mono text-xs uppercase tracking-widest text-[var(--rust)] mb-1 font-semibold">
+                      Procurement &amp; Orders · Surya Prakashan Mandir
+                    </div>
+                    <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--ink)] leading-snug">
+                      Ready to order this volume?
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#5e5b54] mt-2 leading-relaxed">
+                      Please contact Surya Prakashan Mandir specifying the
+                      semester volume, number of copies required, and your
+                      delivery PIN code to confirm price, stock, and delivery
+                      charges.
+                    </p>
+
+                    {/* Quick Publisher Contact Strip */}
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-4 pt-3 border-t border-[var(--line)] text-xs text-[var(--muted)] font-mono">
+                      <span>Publisher: Dr. Prashant Bissa</span>
+                      <span className="hidden sm:inline">·</span>
+                      <a
+                        href="tel:+919829280717"
+                        className="hover:text-[var(--rust)] transition-colors inline-flex items-center gap-1 text-[var(--ink)] font-semibold"
+                      >
+                        <Phone size={12} /> +91 98292 80717
+                      </a>
+                    </div>
                   </div>
-                  <h3 className="font-serif text-2xl font-medium text-[var(--ink)]">
-                    Ready to order this volume?
-                  </h3>
-                  <p className="text-xs text-[#5e5b54] mt-2 max-w-md">
-                    Please contact Surya Prakashan Mandir specifying the semester
-                    volume, number of copies required, and your delivery PIN
-                    code.
-                  </p>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link
-                    className="button"
-                    href={`/contact?subject=${encodeURIComponent(
-                      `Ordering enquiry for The Literary Compass ${book.semester}`
-                    )}`}
-                  >
-                    Enquire About This Volume <ArrowUpRight size={16} />
-                  </Link>
-                  <Link className="button secondary" href="/brochure.pdf">
-                    Brochure <Download size={16} />
-                  </Link>
+
+                  {/* Clean Action Buttons */}
+                  <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+                    <BuyNowButton
+                      volumeTitle={book.title}
+                      semester={book.semester}
+                      label="Buy Now (Scan QR)"
+                      className="button text-xs py-3 px-5 shadow-sm"
+                    />
+                    <a
+                      href={`https://wa.me/919829280717?text=${encodeURIComponent(
+                        `Hello Dr. Bissa, I would like to order/enquire about The Literary Compass ${book.semester}: ${book.title}.`,
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="button secondary text-xs py-3 px-4"
+                    >
+                      Enquire via WhatsApp <ArrowUpRight size={14} />
+                    </a>
+                  </div>
                 </div>
               </div>
             </Reveal>

@@ -401,8 +401,9 @@ p {
 }
 .detail-layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 90px;
+  grid-template-columns: 280px 1fr;
+  gap: 70px;
+  align-items: start;
 }
 .detail-aside {
   font:
@@ -411,6 +412,9 @@ p {
   text-transform: uppercase;
   color: var(--muted);
   line-height: 2;
+  position: sticky;
+  top: 100px;
+  align-self: start;
 }
 .detail-content h2 {
   font:
@@ -796,6 +800,9 @@ p {
     grid-template-columns: 1fr;
     gap: 35px;
   }
+  .detail-aside {
+    position: static;
+  }
   .zigzag-reverse > :first-child {
     order: unset;
   }
@@ -888,3 +895,34 @@ p {
     font-size: 15px;
   }
 }
+
+/* ─── Fullscreen Modal Overlay ─── */
+.qr-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(15, 15, 14, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  overflow-y: auto !important;
+}
+.qr-modal-card {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  max-height: 92vh !important;
+  background: var(--paper) !important;
+  border: 2px solid var(--ink) !important;
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.65) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  margin: auto !important;
+}
+
