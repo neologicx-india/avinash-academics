@@ -13,17 +13,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const bookCoverDimensions: Record<
-  number,
-  { width: number; height: number; aspect: string }
-> = {
-  1: { width: 1028, height: 1408, aspect: "1028/1408" },
-  2: { width: 1086, height: 1448, aspect: "1086/1448" },
-  3: { width: 1086, height: 1448, aspect: "1086/1448" },
-  4: { width: 1024, height: 1536, aspect: "1024/1536" },
-  5: { width: 1024, height: 1536, aspect: "1024/1536" },
-  6: { width: 1024, height: 1536, aspect: "1024/1536" },
-};
+const compassBooks = books.filter((b) => b.series === "literary-compass");
 
 export function BooksSlider() {
   const swiperRef = useRef<SwiperType | null>(null);
@@ -94,76 +84,68 @@ export function BooksSlider() {
           spaceBetween={20}
           className="pb-2 overflow-hidden"
         >
-          {books.map((book) => {
-            const dim = bookCoverDimensions[book.semesterNumber] || {
-              width: 1028,
-              height: 1408,
-              aspect: "1028/1408",
-            };
+          {compassBooks.map((book) => (
+            <SwiperSlide
+              key={book.slug}
+              className="!w-[230px] sm:!w-[250px] md:!w-[270px] !h-auto shrink-0"
+            >
+              <div className="h-full border border-[var(--line)] bg-[var(--paper)] p-4 flex flex-col justify-between rounded-sm shadow-xs transition-all duration-300 hover:shadow-lg hover:border-[var(--rust)]/60 relative select-none">
+                <div>
+                  {/* Card Meta */}
+                  <div className="flex items-center justify-between mb-3 text-xs font-mono tracking-wider text-[var(--muted)]">
+                    <span className="text-[var(--rust)] font-semibold">
+                      {book.badgeLabel}
+                    </span>
+                    <span>{book.semester}</span>
+                  </div>
 
-            return (
-              <SwiperSlide
-                key={book.slug}
-                className="!w-[230px] sm:!w-[250px] md:!w-[270px] !h-auto shrink-0"
-              >
-                <div className="h-full border border-[var(--line)] bg-[var(--paper)] p-4 flex flex-col justify-between rounded-sm shadow-xs transition-all duration-300 hover:shadow-lg hover:border-[var(--rust)]/60 relative select-none">
-                  <div>
-                    {/* Card Meta */}
-                    <div className="flex items-center justify-between mb-3 text-xs font-mono tracking-wider text-[var(--muted)]">
-                      <span className="text-[var(--rust)] font-semibold">
-                        VOL. 0{book.semesterNumber}
-                      </span>
-                      <span>{book.semester}</span>
-                    </div>
+                  {/* 3D Book Showcase Stage with exact dimensions */}
+                  <Link
+                    href={`/books/${book.slug}`}
+                    className="group/img block relative w-full aspect-[1028/1408] mb-3.5 p-3 rounded-sm bg-gradient-to-b from-[#faf8f3] via-[#f3eee3] to-[#e8e1d2] border border-[#dcd4c3] overflow-hidden flex items-center justify-center cursor-pointer transition-all duration-300 hover:border-[var(--rust)]/40"
+                    title={`View ${book.title}`}
+                  >
+                    {/* Centered 3D Book */}
+                    <div className="relative w-full h-full flex items-center justify-center">
+                      <div className="relative h-full w-auto aspect-[1028/1408] max-w-full transition-transform duration-300 ease-out group-hover/img:-translate-y-1.5 group-hover/img:scale-[1.02]">
+                        {/* Book drop shadow */}
+                        <div className="absolute inset-0 bg-black/25 blur-md translate-y-2 scale-[0.96] rounded-[2px] transition-all duration-300 group-hover/img:blur-lg group-hover/img:translate-y-3.5 group-hover/img:bg-black/30" />
 
-                    {/* 3D Book Showcase Stage with exact dimensions */}
-                    <Link
-                      href={`/books/${book.slug}`}
-                      className="group/img block relative w-full aspect-[1028/1408] mb-3.5 p-3 rounded-sm bg-gradient-to-b from-[#faf8f3] via-[#f3eee3] to-[#e8e1d2] border border-[#dcd4c3] overflow-hidden flex items-center justify-center cursor-pointer transition-all duration-300 hover:border-[var(--rust)]/40"
-                      title={`View ${book.title}`}
-                    >
-                      {/* Centered 3D Book */}
-                      <div className="relative w-full h-full flex items-center justify-center">
-                        <div className="relative h-full w-auto aspect-[1028/1408] max-w-full transition-transform duration-300 ease-out group-hover/img:-translate-y-1.5 group-hover/img:scale-[1.02]">
-                          {/* Book drop shadow */}
-                          <div className="absolute inset-0 bg-black/25 blur-md translate-y-2 scale-[0.96] rounded-[2px] transition-all duration-300 group-hover/img:blur-lg group-hover/img:translate-y-3.5 group-hover/img:bg-black/30" />
-
-                          {/* Book Cover Image */}
-                          <Image
-                            src={`/sem-${book.semesterNumber}.jpeg`}
-                            alt={`${book.title} - ${book.semester}`}
-                            width={dim.width}
-                            height={dim.height}
-                            className="relative z-10 h-full w-auto object-contain rounded-[2px] shadow-[0_4px_10px_rgba(0,0,0,0.12)] ring-1 ring-black/10 pointer-events-none"
-                            quality={92}
-                          />
-                        </div>
+                        {/* Book Cover Image */}
+                        <Image
+                          src={book.coverImage}
+                          alt={`${book.title} - ${book.semester}`}
+                          width={book.coverWidth}
+                          height={book.coverHeight}
+                          className="relative z-10 h-full w-auto object-contain rounded-[2px] shadow-[0_4px_10px_rgba(0,0,0,0.12)] ring-1 ring-black/10 pointer-events-none"
+                          quality={92}
+                        />
                       </div>
-                    </Link>
+                    </div>
+                  </Link>
 
-                    {/* Title & Subtitle */}
-                    <h4 className="font-serif text-base font-medium tracking-tight leading-snug mb-1 hover:text-[var(--rust)] transition-colors line-clamp-2">
-                      <Link href={`/books/${book.slug}`}>{book.title}</Link>
-                    </h4>
+                  {/* Title & Subtitle */}
+                  <h4 className="font-serif text-base font-medium tracking-tight leading-snug mb-1 hover:text-[var(--rust)] transition-colors line-clamp-2">
+                    <Link href={`/books/${book.slug}`}>{book.title}</Link>
+                  </h4>
 
-                    <p className="text-[11px] uppercase tracking-wider font-mono text-[var(--muted)] mb-3 line-clamp-1">
-                      {book.subtitle}
-                    </p>
-                  </div>
-
-                  {/* Footer Action */}
-                  <div className="pt-3 border-t border-[var(--line)]">
-                    <Link
-                      href={`/books/${book.slug}`}
-                      className="button text-xs py-2 px-3 w-full justify-center"
-                    >
-                      Explore Volume <ArrowUpRight size={13} />
-                    </Link>
-                  </div>
+                  <p className="text-[11px] uppercase tracking-wider font-mono text-[var(--muted)] mb-3 line-clamp-1">
+                    {book.subtitle}
+                  </p>
                 </div>
-              </SwiperSlide>
-            );
-          })}
+
+                {/* Footer Action */}
+                <div className="pt-3 border-t border-[var(--line)]">
+                  <Link
+                    href={`/books/${book.slug}`}
+                    className="button text-xs py-2 px-3 w-full justify-center"
+                  >
+                    Explore Volume <ArrowUpRight size={13} />
+                  </Link>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
 

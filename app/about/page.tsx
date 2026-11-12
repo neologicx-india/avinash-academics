@@ -13,6 +13,23 @@ import { Reveal } from "@/components/reveal";
 
 export const metadata: Metadata = { title: "About — Professor Avinash Jodha" };
 
+const YOUTUBE_URL = "https://www.youtube.com/@avinashjodha4891";
+
+function YouTubeIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className="text-[var(--rust)] shrink-0"
+    >
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  );
+}
+
 const specialisations = [
   "Postcolonial Studies",
   "Diaspora Studies",
@@ -82,6 +99,15 @@ export default function About() {
                   <Link className="button secondary" href="/contact">
                     Academic Enquiries <ArrowUpRight size={16} />
                   </Link>
+                  <a
+                    className="button secondary"
+                    href={YOUTUBE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <YouTubeIcon />
+                    YouTube Channel <ArrowUpRight size={16} />
+                  </a>
                 </div>
               </Reveal>
             </div>
@@ -208,6 +234,25 @@ export default function About() {
                       <p>University of Rajasthan, Jaipur</p>
                     </div>
                   </div>
+                </div>
+
+                <div className="about-edu-block mt-6">
+                  <div className="eyebrow" style={{ marginBottom: "12px" }}>
+                    YouTube Channel
+                  </div>
+                  <p className="text-sm text-[#5e5b54] leading-relaxed mb-4">
+                    Lectures, literary discussions and academic talks.
+                  </p>
+                  <a
+                    href={YOUTUBE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--rust)] transition-colors"
+                  >
+                    <YouTubeIcon size={18} />
+                    <span>@avinashjodha4891</span>
+                    <ArrowUpRight size={15} />
+                  </a>
                 </div>
               </div>
             </Reveal>

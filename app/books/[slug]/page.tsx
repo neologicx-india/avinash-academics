@@ -19,18 +19,6 @@ import { books } from "@/lib/content";
 import { Reveal } from "@/components/reveal";
 import { BuyNowButton } from "@/components/qr-modal";
 
-const bookCoverDimensions: Record<
-  number,
-  { width: number; height: number; aspect: string }
-> = {
-  1: { width: 1028, height: 1408, aspect: "1028/1408" },
-  2: { width: 1086, height: 1448, aspect: "1086/1448" },
-  3: { width: 1086, height: 1448, aspect: "1086/1448" },
-  4: { width: 1024, height: 1536, aspect: "1024/1536" },
-  5: { width: 1024, height: 1536, aspect: "1024/1536" },
-  6: { width: 1024, height: 1536, aspect: "1024/1536" },
-};
-
 export function generateStaticParams() {
   return books.map((book) => ({ slug: book.slug }));
 }
@@ -42,10 +30,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const book = books.find((b) => b.slug === slug);
-  if (!book) return { title: "Volume Not Found" };
+  if (!book) return { title: "Book Not Found" };
 
   return {
-    title: `${book.title} — ${book.semester} | The Literary Compass`,
+    title:
+      book.series === "literary-compass"
+        ? `${book.title} — ${book.semester} | The Literary Compass`
+        : `${book.title} | Prof. Avinash Jodha`,
     description: book.description,
   };
 }
@@ -56,14 +47,17 @@ export default async function BookDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const currentIndex = books.findIndex((b) => b.slug === slug);
-  const book = books[currentIndex];
+  const book = books.find((b) => b.slug === slug);
 
   if (!book) notFound();
 
-  const prevBook = currentIndex > 0 ? books[currentIndex - 1] : null;
+  const isCompass = book.series === "literary-compass";
+  const seriesBooks = books.filter((b) => b.series === book.series);
+  const seriesIndex = seriesBooks.findIndex((b) => b.slug === slug);
+  const prevBook = seriesIndex > 0 ? seriesBooks[seriesIndex - 1] : null;
   const nextBook =
-    currentIndex < books.length - 1 ? books[currentIndex + 1] : null;
+    seriesIndex < seriesBooks.length - 1 ? seriesBooks[seriesIndex + 1] : null;
+  const roleLabel = book.roleLabel || "Chief Editor";
 
   return (
     <main>
@@ -73,25 +67,29 @@ export default async function BookDetailPage({
           {/* Breadcrumbs & Volume Pill */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-[var(--line)]/60">
             <Link
-              href="/books"
+              href={isCompass ? "/books" : "/books#other-books"}
               className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--muted)] hover:text-[var(--rust)] transition-colors group"
             >
               <ArrowLeft
                 size={13}
                 className="transition-transform group-hover:-translate-x-1"
               />
-              <span>The Literary Compass</span>
+              <span>
+                {isCompass ? "The Literary Compass" : "Books & Publications"}
+              </span>
               <span className="text-[var(--line)]">/</span>
-              <span>All Volumes</span>
+              <span>{isCompass ? "All Volumes" : "All Books"}</span>
             </Link>
 
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider bg-[var(--paper-deep)] border border-[var(--line)] text-[var(--rust)] font-semibold uppercase">
-                Volume 0{book.semesterNumber} · {book.semester}
+                {book.badgeLabel} · {book.semester}
               </span>
-              <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-mono tracking-wider bg-white/80 border border-[var(--line)] text-[var(--muted)] uppercase">
-                MGSU NEP Syllabus
-              </span>
+              {book.syllabusTag && (
+                <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-mono tracking-wider bg-white/80 border border-[var(--line)] text-[var(--muted)] uppercase">
+                  {book.syllabusTag}
+                </span>
+              )}
             </div>
           </div>
 
@@ -110,7 +108,7 @@ export default async function BookDetailPage({
             <div className="flex flex-wrap items-center gap-y-2 gap-x-6 mt-6 pt-5 border-t border-[var(--line)] text-xs font-mono text-[var(--muted)]">
               <div>
                 <span className="text-[var(--rust)] uppercase tracking-wider font-semibold">
-                  Chief Editor:
+                  {roleLabel}:
                 </span>{" "}
                 <span className="text-[var(--ink)] font-medium">
                   {book.chiefEditor}
@@ -119,7 +117,7 @@ export default async function BookDetailPage({
               <span className="hidden md:inline text-[var(--line)]">|</span>
               <div>
                 <span className="text-[var(--rust)] uppercase tracking-wider font-semibold">
-                  Course:
+                  {isCompass ? "Course:" : "Focus:"}
                 </span>{" "}
                 <span className="text-[var(--ink)] font-medium">
                   {book.course}
@@ -131,7 +129,7 @@ export default async function BookDetailPage({
                   Publisher:
                 </span>{" "}
                 <span className="text-[var(--ink)] font-medium">
-                  Surya Prakashan Mandir
+                  {book.publisher}
                 </span>
               </div>
             </div>
@@ -150,22 +148,10 @@ export default async function BookDetailPage({
                 <div className="relative h-full w-auto aspect-[1028/1408] max-w-full drop-shadow-[0_12px_24px_rgba(20,15,10,0.2)]">
                   {/* Book Cover Image with exact dimensions */}
                   <Image
-                    src={`/sem-${book.semesterNumber}.jpeg`}
+                    src={book.coverImage}
                     alt={`${book.title} - ${book.semester}`}
-                    width={
-                      (
-                        bookCoverDimensions[book.semesterNumber] || {
-                          width: 1028,
-                        }
-                      ).width
-                    }
-                    height={
-                      (
-                        bookCoverDimensions[book.semesterNumber] || {
-                          height: 1408,
-                        }
-                      ).height
-                    }
+                    width={book.coverWidth}
+                    height={book.coverHeight}
                     className="h-full w-auto object-contain rounded-[2px] ring-1 ring-black/10"
                     priority
                     quality={95}
@@ -177,26 +163,37 @@ export default async function BookDetailPage({
 
               {/* Quick Buy in Sidebar */}
               <div className="pt-1">
-                <BuyNowButton
-                  volumeTitle={book.title}
-                  semester={book.semester}
-                  label="Order Volume (QR)"
-                  className="button w-full justify-center text-xs py-2.5"
-                />
+                {book.amazonUrl ? (
+                  <a
+                    href={book.amazonUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="button w-full justify-center text-xs py-2.5"
+                  >
+                    Buy Now <ArrowUpRight size={14} />
+                  </a>
+                ) : (
+                  <BuyNowButton
+                    volumeTitle={book.title}
+                    semester={book.semester}
+                    label="Order Volume (QR)"
+                    className="button w-full justify-center text-xs py-2.5"
+                  />
+                )}
               </div>
 
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--muted)] block mb-1">
-                  Volume Identifier
+                  {isCompass ? "Volume Identifier" : "Edition / Category"}
                 </span>
                 <strong className="text-sm font-semibold text-[var(--ink)]">
-                  Volume 0{book.semesterNumber} · {book.semester}
+                  {book.badgeLabel} · {book.semester}
                 </strong>
               </div>
 
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--muted)] block mb-1">
-                  Course
+                  {isCompass ? "Course" : "Subject / Focus"}
                 </span>
                 <span className="text-xs text-[var(--ink)] block">
                   {book.course}
@@ -205,7 +202,7 @@ export default async function BookDetailPage({
 
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--muted)] block mb-1">
-                  University
+                  {isCompass ? "University" : "Target / Context"}
                 </span>
                 <span className="text-xs text-[var(--ink)] block">
                   {book.university}
@@ -223,7 +220,7 @@ export default async function BookDetailPage({
 
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--muted)] block mb-1">
-                  Chief Editor
+                  {roleLabel}
                 </span>
                 <span className="text-xs text-[var(--ink)] block font-medium">
                   {book.chiefEditor}
@@ -232,10 +229,10 @@ export default async function BookDetailPage({
 
               <div className="pt-4 border-t border-[var(--line)]">
                 <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--rust)] block mb-2 font-semibold">
-                  All 6 Semesters
+                  {isCompass ? "All 6 Semesters" : "Other Published Books"}
                 </span>
                 <ul className="space-y-1.5 text-xs">
-                  {books.map((b) => (
+                  {seriesBooks.map((b) => (
                     <li key={b.slug}>
                       <Link
                         href={`/books/${b.slug}`}
@@ -245,7 +242,7 @@ export default async function BookDetailPage({
                             : "text-[var(--muted)] hover:text-[var(--ink)]"
                         }`}
                       >
-                        {b.semester}
+                        {isCompass ? b.semester : b.title}
                       </Link>
                     </li>
                   ))}
@@ -259,7 +256,9 @@ export default async function BookDetailPage({
             {/* 1. Overview */}
             <Reveal>
               <div>
-                <div className="eyebrow mb-2">Volume Overview</div>
+                <div className="eyebrow mb-2">
+                  {isCompass ? "Volume Overview" : "Book Overview"}
+                </div>
                 <h2>Reading with context and care</h2>
                 <div className="text-base md:text-lg leading-relaxed text-[#5e5b54] space-y-4">
                   <p>{book.description}</p>
@@ -270,7 +269,9 @@ export default async function BookDetailPage({
             {/* 2. Selected Coverage */}
             <Reveal delay={0.08}>
               <div className="border border-[var(--line)] bg-[var(--paper-deep)] p-8">
-                <div className="eyebrow mb-2">Curriculum Focus</div>
+                <div className="eyebrow mb-2">
+                  {isCompass ? "Curriculum Focus" : "Key Coverage"}
+                </div>
                 <h3 className="font-serif text-2xl font-medium tracking-tight mb-3">
                   Selected coverage
                 </h3>
@@ -278,9 +279,8 @@ export default async function BookDetailPage({
                   {book.coverage}
                 </p>
                 <div className="mt-4 pt-4 border-t border-[var(--line)] text-xs text-[#5e5b54]">
-                  Key authors, foundational essays, dramatic masterworks, and
-                  classical devotional poetry aligned with the MGSU BA English
-                  curriculum.
+                  {book.coverageNote ||
+                    "Key authors, foundational essays, dramatic masterworks, and classical devotional poetry aligned with the MGSU BA English curriculum."}
                 </div>
               </div>
             </Reveal>
@@ -288,11 +288,14 @@ export default async function BookDetailPage({
             {/* 3. Study Support */}
             <Reveal delay={0.12}>
               <div>
-                <div className="eyebrow mb-2">Pedagogical Apparatus</div>
-                <h2>Study support</h2>
+                <div className="eyebrow mb-2">
+                  {isCompass ? "Pedagogical Apparatus" : "Book Highlights"}
+                </div>
+                <h2>{isCompass ? "Study support" : "Key features"}</h2>
                 <p className="text-sm md:text-base text-[#5e5b54] mb-6">
-                  Literary foundations, critical study, detailed summaries,
-                  glossaries, passage explanations, answered questions and MCQs.
+                  {isCompass
+                    ? "Literary foundations, critical study, detailed summaries, glossaries, passage explanations, answered questions and MCQs."
+                    : "Key highlights, thematic coverage, and structural features included in this edition."}
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -319,13 +322,15 @@ export default async function BookDetailPage({
               <div className="border border-[var(--line)] bg-[var(--paper)]">
                 <div className="p-6 border-b border-[var(--line)] bg-[var(--paper-deep)]">
                   <h3 className="font-serif text-xl font-medium tracking-tight">
-                    Volume details &amp; academic credits
+                    {isCompass
+                      ? "Volume details & academic credits"
+                      : "Book details & publication credits"}
                   </h3>
                 </div>
                 <div className="divide-y divide-[var(--line)] text-sm">
                   <div className="grid grid-cols-1 sm:grid-cols-3 p-4">
                     <span className="font-mono text-xs text-[var(--muted)] uppercase tracking-wider">
-                      Course
+                      {isCompass ? "Course" : "Subject / Focus"}
                     </span>
                     <span className="sm:col-span-2 text-[var(--ink)] font-medium mt-1 sm:mt-0">
                       {book.course}
@@ -333,7 +338,7 @@ export default async function BookDetailPage({
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 p-4">
                     <span className="font-mono text-xs text-[var(--muted)] uppercase tracking-wider">
-                      University
+                      {isCompass ? "University" : "Target / Context"}
                     </span>
                     <span className="sm:col-span-2 text-[var(--ink)] font-medium mt-1 sm:mt-0">
                       {book.university}
@@ -341,20 +346,22 @@ export default async function BookDetailPage({
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 p-4">
                     <span className="font-mono text-xs text-[var(--muted)] uppercase tracking-wider">
-                      Chief Editor
+                      {roleLabel}
                     </span>
                     <span className="sm:col-span-2 text-[var(--ink)] font-medium mt-1 sm:mt-0">
                       {book.chiefEditor}
                     </span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 p-4">
-                    <span className="font-mono text-xs text-[var(--muted)] uppercase tracking-wider">
-                      Co-editors
-                    </span>
-                    <span className="sm:col-span-2 text-[var(--ink)] font-medium mt-1 sm:mt-0">
-                      {book.coEditors}
-                    </span>
-                  </div>
+                  {book.coEditors && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 p-4">
+                      <span className="font-mono text-xs text-[var(--muted)] uppercase tracking-wider">
+                        Co-editors
+                      </span>
+                      <span className="sm:col-span-2 text-[var(--ink)] font-medium mt-1 sm:mt-0">
+                        {book.coEditors}
+                      </span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-3 p-4">
                     <span className="font-mono text-xs text-[var(--muted)] uppercase tracking-wider">
                       Publisher
@@ -384,54 +391,91 @@ export default async function BookDetailPage({
                   style={{ backgroundColor: book.color }}
                 />
 
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-2">
-                  <div className="max-w-xl">
-                    <div className="font-mono text-xs uppercase tracking-widest text-[var(--rust)] mb-1 font-semibold">
-                      Procurement &amp; Orders · Surya Prakashan Mandir
+                {book.amazonUrl ? (
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-2">
+                    <div className="max-w-xl">
+                      <div className="font-mono text-xs uppercase tracking-widest text-[var(--rust)] mb-1 font-semibold">
+                        Order Online · Amazon India
+                      </div>
+                      <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--ink)] leading-snug">
+                        Available on Amazon
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#5e5b54] mt-2 leading-relaxed">
+                        You can purchase <em>{book.title}</em> directly through
+                        Amazon India, or reach out for academic, institutional,
+                        or bulk enquiries.
+                      </p>
                     </div>
-                    <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--ink)] leading-snug">
-                      Ready to order this volume?
-                    </h3>
-                    <p className="text-xs sm:text-sm text-[#5e5b54] mt-2 leading-relaxed">
-                      Please contact Surya Prakashan Mandir specifying the
-                      semester volume, number of copies required, and your
-                      delivery PIN code to confirm price, stock, and delivery
-                      charges.
-                    </p>
 
-                    {/* Quick Publisher Contact Strip */}
-                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-4 pt-3 border-t border-[var(--line)] text-xs text-[var(--muted)] font-mono">
-                      <span>Publisher: Dr. Prashant Bissa</span>
-                      <span className="hidden sm:inline">·</span>
+                    <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
                       <a
-                        href="tel:+919829280717"
-                        className="hover:text-[var(--rust)] transition-colors inline-flex items-center gap-1 text-[var(--ink)] font-semibold"
+                        href={book.amazonUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="button text-xs py-3 px-5 shadow-sm justify-center whitespace-nowrap"
                       >
-                        <Phone size={12} /> +91 98292 80717
+                        Buy Now <ArrowUpRight size={14} />
+                      </a>
+                      <Link
+                        href={`/contact?subject=${encodeURIComponent(
+                          `Book enquiry: ${book.title}`,
+                        )}`}
+                        className="button secondary text-xs py-3 px-4 justify-center whitespace-nowrap"
+                      >
+                        Academic Enquiry <ArrowUpRight size={14} />
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pl-2">
+                    <div className="max-w-xl">
+                      <div className="font-mono text-xs uppercase tracking-widest text-[var(--rust)] mb-1 font-semibold">
+                        Procurement &amp; Orders · Surya Prakashan Mandir
+                      </div>
+                      <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--ink)] leading-snug">
+                        Ready to order this volume?
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#5e5b54] mt-2 leading-relaxed">
+                        Please contact Surya Prakashan Mandir specifying the
+                        semester volume, number of copies required, and your
+                        delivery PIN code to confirm price, stock, and delivery
+                        charges.
+                      </p>
+
+                      {/* Quick Publisher Contact Strip */}
+                      <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-4 pt-3 border-t border-[var(--line)] text-xs text-[var(--muted)] font-mono">
+                        <span>Publisher: Dr. Prashant Bissa</span>
+                        <span className="hidden sm:inline">·</span>
+                        <a
+                          href="tel:+919829280717"
+                          className="hover:text-[var(--rust)] transition-colors inline-flex items-center gap-1 text-[var(--ink)] font-semibold"
+                        >
+                          <Phone size={12} /> +91 98292 80717
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Clean Action Buttons */}
+                    <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+                      <BuyNowButton
+                        volumeTitle={book.title}
+                        semester={book.semester}
+                        label="Buy Now (Scan QR)"
+                        className="button text-xs py-3 px-5 shadow-sm"
+                      />
+                      <a
+                        href={`https://wa.me/919829280717?text=${encodeURIComponent(
+                          `Hello Dr. Bissa, I would like to order/enquire about The Literary Compass ${book.semester}: ${book.title}.`,
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="button secondary text-xs py-3 px-4"
+                      >
+                        Enquire via WhatsApp <ArrowUpRight size={14} />
                       </a>
                     </div>
                   </div>
-
-                  {/* Clean Action Buttons */}
-                  <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
-                    <BuyNowButton
-                      volumeTitle={book.title}
-                      semester={book.semester}
-                      label="Buy Now (Scan QR)"
-                      className="button text-xs py-3 px-5 shadow-sm"
-                    />
-                    <a
-                      href={`https://wa.me/919829280717?text=${encodeURIComponent(
-                        `Hello Dr. Bissa, I would like to order/enquire about The Literary Compass ${book.semester}: ${book.title}.`,
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="button secondary text-xs py-3 px-4"
-                    >
-                      Enquire via WhatsApp <ArrowUpRight size={14} />
-                    </a>
-                  </div>
-                </div>
+                )}
               </div>
             </Reveal>
 
@@ -443,10 +487,13 @@ export default async function BookDetailPage({
                   className="p-4 border border-[var(--line)] hover:border-[var(--rust)] bg-[var(--paper)] transition-colors group flex flex-col"
                 >
                   <span className="font-mono text-[11px] uppercase tracking-wider text-[var(--muted)] flex items-center gap-1 group-hover:text-[var(--rust)]">
-                    <ArrowLeft size={12} /> Previous Semester
+                    <ArrowLeft size={12} />{" "}
+                    {isCompass ? "Previous Semester" : "Previous Book"}
                   </span>
                   <strong className="font-serif text-base font-medium mt-1 text-[var(--ink)]">
-                    {prevBook.semester}: {prevBook.title}
+                    {isCompass
+                      ? `${prevBook.semester}: ${prevBook.title}`
+                      : prevBook.title}
                   </strong>
                 </Link>
               ) : (
@@ -459,10 +506,13 @@ export default async function BookDetailPage({
                   className="p-4 border border-[var(--line)] hover:border-[var(--rust)] bg-[var(--paper)] transition-colors group flex flex-col text-right sm:ml-auto w-full"
                 >
                   <span className="font-mono text-[11px] uppercase tracking-wider text-[var(--muted)] flex items-center justify-end gap-1 group-hover:text-[var(--rust)]">
-                    Next Semester <ArrowRight size={12} />
+                    {isCompass ? "Next Semester" : "Next Book"}{" "}
+                    <ArrowRight size={12} />
                   </span>
                   <strong className="font-serif text-base font-medium mt-1 text-[var(--ink)]">
-                    {nextBook.semester}: {nextBook.title}
+                    {isCompass
+                      ? `${nextBook.semester}: ${nextBook.title}`
+                      : nextBook.title}
                   </strong>
                 </Link>
               ) : (

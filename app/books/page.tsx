@@ -13,28 +13,105 @@ import {
   FileText,
   Building2,
 } from "lucide-react";
-import { books, seriesInfo } from "@/lib/content";
+import { books, seriesInfo, type BookVolume } from "@/lib/content";
 import { Reveal } from "@/components/reveal";
 import { BuyNowButton } from "@/components/qr-modal";
 
 export const metadata: Metadata = {
-  title: "The Literary Compass — A Six-Volume Companion by Prof. Avinash Jodha",
+  title: "The Literary Compass & Books — Prof. Avinash Jodha",
   description:
-    "A Complete Companion for BA English Literature across six semesters based on the syllabus of Maharaja Ganga Singh University, Bikaner under NEP.",
+    "The Literary Compass six-volume BA English Literature series alongside Professor Avinash Jodha's HPPSC Assistant Professor guides and critical monograph on Michael Ondaatje.",
 };
 
-// Book cover dimensions extracted from image assets
-const bookCoverDimensions: Record<
-  number,
-  { width: number; height: number; aspect: string }
-> = {
-  1: { width: 1028, height: 1408, aspect: "1028/1408" },
-  2: { width: 1086, height: 1448, aspect: "1086/1448" },
-  3: { width: 1086, height: 1448, aspect: "1086/1448" },
-  4: { width: 1024, height: 1536, aspect: "1024/1536" },
-  5: { width: 1024, height: 1536, aspect: "1024/1536" },
-  6: { width: 1024, height: 1536, aspect: "1024/1536" },
-};
+const compassBooks = books.filter((b) => b.series === "literary-compass");
+const authoredBooks = books.filter((b) => b.series === "authored-books");
+
+function BookCard({ book, index }: { book: BookVolume; index: number }) {
+  return (
+    <Reveal delay={index * 0.08}>
+      <div className="border border-[var(--line)] bg-[var(--paper)] p-5 flex flex-col justify-between h-full relative group transition-all duration-300 hover:shadow-xl">
+        <div>
+          {/* Top Meta */}
+          <div className="flex items-center justify-between mb-3 text-xs font-mono tracking-wider text-[var(--muted)]">
+            <span className="text-[var(--rust)] font-semibold">
+              {book.badgeLabel}
+            </span>
+            <span>{book.semester}</span>
+          </div>
+
+          {/* 3D Book Showcase Stage with natural dimensions */}
+          <Link
+            href={`/books/${book.slug}`}
+            className="group/cover block relative w-full aspect-[1028/1408] mb-4 p-3.5 rounded-sm bg-gradient-to-b from-[#faf8f3] via-[#f3eee3] to-[#e8e1d2] border border-[#dcd4c3] overflow-hidden flex items-center justify-center cursor-pointer transition-all duration-300 hover:border-[var(--rust)]/60 hover:shadow-md"
+            title={`View ${book.title}`}
+          >
+            {/* Archival micro texture */}
+            <div className="absolute inset-0 bg-[radial-gradient(#1a1814_0.75px,transparent_0.75px)] [background-size:12px_12px] opacity-[0.03] pointer-events-none" />
+
+            {/* Centered Realistic 3D Book */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              <div className="relative h-full w-auto aspect-[1028/1408] max-w-full transition-transform duration-300 ease-out group-hover/cover:-translate-y-1.5 group-hover/cover:scale-[1.02]">
+                {/* Book drop shadow */}
+                <div className="absolute inset-0 bg-black/25 blur-md translate-y-2.5 scale-[0.96] rounded-[2px] transition-all duration-300 group-hover/cover:blur-lg group-hover/cover:translate-y-4 group-hover/cover:scale-[0.98] group-hover/cover:bg-black/30" />
+
+                {/* Book Cover Image */}
+                <Image
+                  src={book.coverImage}
+                  alt={`${book.title} - ${book.semester}`}
+                  width={book.coverWidth}
+                  height={book.coverHeight}
+                  className="relative z-10 h-full w-auto object-contain rounded-[2px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] ring-1 ring-black/10"
+                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                  quality={92}
+                  priority={book.semesterNumber <= 3}
+                />
+              </div>
+            </div>
+
+            {/* Hover hint tag */}
+            <span className="absolute bottom-2.5 right-2.5 text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded bg-[var(--ink)] text-[var(--paper)] opacity-0 group-hover/cover:opacity-100 transition-opacity shadow-sm">
+              Explore →
+            </span>
+          </Link>
+
+          {/* Title & Subtitle */}
+          <h3 className="font-serif text-lg sm:text-xl font-medium tracking-tight leading-snug mb-1 group-hover:text-[var(--rust)] transition-colors line-clamp-2">
+            <Link href={`/books/${book.slug}`}>{book.title}</Link>
+          </h3>
+
+          <p className="text-xs uppercase tracking-wider font-mono text-[var(--muted)] mb-3 line-clamp-2">
+            {book.subtitle}
+          </p>
+        </div>
+
+        {/* Actions */}
+        <div>
+          <div className="pt-4 border-t border-[var(--line)] flex items-center justify-between gap-3">
+            <Link
+              href={`/books/${book.slug}`}
+              className="button text-xs py-2 px-3 flex-1 justify-center"
+            >
+              {book.amazonUrl ? "Book Details" : "Explore Volume"}{" "}
+              <ArrowUpRight size={14} />
+            </Link>
+            {book.amazonUrl ? (
+              <a
+                href={book.amazonUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button secondary text-xs py-2 px-3 whitespace-nowrap shrink-0"
+              >
+                Buy Now <ArrowUpRight size={13} />
+              </a>
+            ) : (
+              <BuyNowButton volumeTitle={book.title} semester={book.semester} />
+            )}
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  );
+}
 
 export default function BooksPage() {
   return (
@@ -234,88 +311,39 @@ export default function BooksPage() {
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {books.map((book, i) => {
-              const dim = bookCoverDimensions[book.semesterNumber] || {
-                width: 1028,
-                height: 1408,
-                aspect: "1028/1408",
-              };
-              return (
-                <Reveal key={book.slug} delay={i * 0.08}>
-                  <div className="border border-[var(--line)] bg-[var(--paper)] p-5 flex flex-col justify-between h-full relative group transition-all duration-300  hover:shadow-xl">
-                    <div>
-                      {/* Top Meta */}
-                      <div className="flex items-center justify-between mb-3 text-xs font-mono tracking-wider text-[var(--muted)]">
-                        <span className="text-[var(--rust)] font-semibold">
-                          VOL. 0{book.semesterNumber}
-                        </span>
-                        <span>{book.semester}</span>
-                      </div>
+            {compassBooks.map((book, i) => (
+              <BookCard key={book.slug} book={book} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
 
-                      {/* 3D Book Showcase Stage with exact dimensions */}
-                      <Link
-                        href={`/books/${book.slug}`}
-                        className="group/cover block relative w-full aspect-[1028/1408] mb-4 p-3.5 rounded-sm bg-gradient-to-b from-[#faf8f3] via-[#f3eee3] to-[#e8e1d2] border border-[#dcd4c3] overflow-hidden flex items-center justify-center cursor-pointer transition-all duration-300 hover:border-[var(--rust)]/60 hover:shadow-md"
-                        title={`View ${book.title}`}
-                      >
-                        {/* Archival micro texture */}
-                        <div className="absolute inset-0 bg-[radial-gradient(#1a1814_0.75px,transparent_0.75px)] [background-size:12px_12px] opacity-[0.03] pointer-events-none" />
+      {/* ── Authored Books, Competitive Guides & Monographs ── */}
+      <section
+        id="other-books"
+        className="section border-b border-[var(--line)] scroll-mt-20"
+      >
+        <div className="container">
+          <Reveal>
+            <div className="section-head mb-12">
+              <div>
+                <div className="eyebrow">
+                  Competitive Guides &amp; Critical Monographs
+                </div>
+                <h2 className="section-title">Other Published Books</h2>
+              </div>
+              <p className="section-intro">
+                Exam-oriented textbooks for HPPSC Assistant Professor
+                examinations alongside published scholarly research, available
+                on Amazon India.
+              </p>
+            </div>
+          </Reveal>
 
-                        {/* Centered Realistic 3D Book */}
-                        <div className="relative w-full h-full flex items-center justify-center">
-                          <div className="relative h-full w-auto aspect-[1028/1408] max-w-full transition-transform duration-300 ease-out group-hover/cover:-translate-y-1.5 group-hover/cover:scale-[1.02]">
-                            {/* Book drop shadow */}
-                            <div className="absolute inset-0 bg-black/25 blur-md translate-y-2.5 scale-[0.96] rounded-[2px] transition-all duration-300 group-hover/cover:blur-lg group-hover/cover:translate-y-4 group-hover/cover:scale-[0.98] group-hover/cover:bg-black/30" />
-
-                            {/* Book Cover Image */}
-                            <Image
-                              src={`/sem-${book.semesterNumber}.jpeg`}
-                              alt={`${book.title} - ${book.semester}`}
-                              width={dim.width}
-                              height={dim.height}
-                              className="relative z-10 h-full w-auto object-contain rounded-[2px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] ring-1 ring-black/10"
-                              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                              quality={92}
-                              priority={book.semesterNumber <= 3}
-                            />
-                          </div>
-                        </div>
-
-                        {/* Hover hint tag */}
-                        <span className="absolute bottom-2.5 right-2.5 text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded bg-[var(--ink)] text-[var(--paper)] opacity-0 group-hover/cover:opacity-100 transition-opacity shadow-sm">
-                          Explore →
-                        </span>
-                      </Link>
-
-                      {/* Title & Subtitle */}
-                      <h3 className="font-serif text-lg sm:text-xl font-medium tracking-tight leading-snug mb-1 group-hover:text-[var(--rust)] transition-colors line-clamp-2">
-                        <Link href={`/books/${book.slug}`}>{book.title}</Link>
-                      </h3>
-
-                      <p className="text-xs uppercase tracking-wider font-mono text-[var(--muted)] mb-3">
-                        {book.subtitle}
-                      </p>
-                    </div>
-
-                    {/* Actions */}
-                    <div>
-                      <div className="pt-4 border-t border-[var(--line)] flex items-center justify-between gap-3">
-                        <Link
-                          href={`/books/${book.slug}`}
-                          className="button text-xs py-2 px-3 flex-1 justify-center"
-                        >
-                          Explore Volume <ArrowUpRight size={14} />
-                        </Link>
-                        <BuyNowButton
-                          volumeTitle={book.title}
-                          semester={book.semester}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
-              );
-            })}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {authoredBooks.map((book, i) => (
+              <BookCard key={book.slug} book={book} index={i} />
+            ))}
           </div>
         </div>
       </section>

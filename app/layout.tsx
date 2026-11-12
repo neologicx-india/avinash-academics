@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
@@ -62,7 +62,7 @@ export default function RootLayout({
         <meta name="twitter:image" content={`${siteUrl}/favicon.png`} />
         <meta name="twitter:card" content="summary" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <SiteHeader />
         {children}
         <SiteFooter />
